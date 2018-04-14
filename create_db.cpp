@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
       /* print all the files and directories within directory */
       while ((ent = readdir (dir)) != NULL) {
         std::cout << ent->d_name;
-        generate_image_with_mask(ent->d_name, dest_path);
+        generate_plate_bounding_box(ent->d_name, dest_path);
       }
       closedir (dir);
     } else {
