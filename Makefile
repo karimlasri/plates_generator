@@ -15,6 +15,6 @@ $(OPATH)generate.o:generate.cpp generate.hpp
 box_generator:box_generator.cpp $(OPATH)plate.o
 	$(CC) $(CFLAGS) -o box_generator box_generator.cpp $(LIBS)
 
-$(OPATH)generate.o:plate.cpp plate.hpp
+$(OPATH)plate.o:plate.cpp plate.hpp
 	mkdir -p $(OPATH)
 	$(CC) $(CFLAGS) -g -c plate.cpp -o $(OPATH)plate.o
