@@ -128,7 +128,6 @@ void generate_image_with_mask(string src_path, string dest_folder) {
 
     Mat img = imread(src_path, IMREAD_COLOR);
     Point2f corners[4];
-    // char original_label[PLATE_NUMBER_SIZE];
     srand(time(NULL));
     std::default_random_engine generator;
     std::normal_distribution<double> distribution(0, 20);
@@ -234,7 +233,6 @@ void generate_plate_bounding_box(string src_path, string dest_folder) {
 
     Mat img = imread(src_path, IMREAD_COLOR);
     Point2f corners[4];
-    // char original_label[PLATE_NUMBER_SIZE];
     srand(time(NULL));
     std::default_random_engine generator;
     std::normal_distribution<double> distribution(0, 20);
