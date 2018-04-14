@@ -85,7 +85,11 @@ int main(int argc, char **argv)
     char number[PLATE_NUMBER_SIZE];
     generate_random_number(number);
     put_generated_number(img, contours, number);
-    string imgout = dest_folder + '/' + number_to_string(number) + ".jpg";
+    string imgout = "generated/" + number_to_string(number) + ".jpg";
+    if (argc >= 3)
+    {
+        string imgout = "generated/" + string(argv[2]) + ".jpg";
+    }
     std::vector<int> bounding_tl = (min(contours[0].x, contours[3].x), min(contours[0].y, contours[1].y)))
     crop = img[min(contours[0].y, contours[1].y):max(contours[0].y, contours[1].y), min(contours[0].x, contours[3].x):max(contours[0].x, contours[3].x)]
     // Bottom-right corner of bounding rect
