@@ -8,6 +8,7 @@
 #include <math.h>
 #include <chrono>
 #include <random>
+#include <unistd.h>
 
 #include "generate.hpp"
 #include "plate.hpp"
@@ -16,6 +17,20 @@
 
 using namespace std;
 using namespace cv;
+
+unsigned long mix(unsigned long a, unsigned long b, unsigned long c)
+{
+    a=a-b; a=a-c; a=a^(c>>13);
+    b=b-c; b=b-a; b=b^(a<<8);
+    c=c-a; c=c-b; c=c^(b>>13);
+    a=a-b; a=a-c; a=a^(c>>13);
+    b=b-c; b=b-a; b=b^(a<<16);
+    c=c-a; c=c-b; c=c^(b>>5);
+    a=a-b; a=a-c, a=a^(c>>3);
+    b=b-c, b=b-a; b=b^(a<<10);
+    c=c-a; c=c-b; c=c^(b>>15);
+    return c;
+}
 
 int main(int argc, char **argv)
 {
@@ -31,11 +46,13 @@ int main(int argc, char **argv)
     nb = Split(vect, src_name, '.');
     src_name = vect[0];
 
-
     Mat original = imread(imgpath, IMREAD_COLOR);
     Mat img = imread(imgpath, IMREAD_COLOR);
     Point2f corners[4];
-    srand(time(NULL));
+
+    unsigned long seed = mix(clock(), time(NULL), getpid());
+
+    srand(seed);
     std::default_random_engine generator;
     std::normal_distribution<double> distribution(0, 20);
     // Angle for pan
@@ -90,8 +107,13 @@ int main(int argc, char **argv)
     {
         string imgout = "generated/" + string(argv[2]) + ".jpg";
     }
-    std::vector<int> bounding_tl = (min(contours[0].x, contours[3].x), min(contours[0].y, contours[1].y)))
-    crop = img[min(contours[0].y, contours[1].y):max(contours[0].y, contours[1].y), min(contours[0].x, contours[3].x):max(contours[0].x, contours[3].x)]
+    //std::vector<int> bounding_tl = (min(contours[0].x, contours[3].x), min(contours[0].y, contours[1].y)))
+    int tl_x = min(contours[0].x, contours[1].x);
+    int tl_y = min(contours[0].y, contours[1].y);
+    int br_x = max(contours[0].x, contours[1].x);
+    int br_y = max(contours[0].y, contours[1].y);
+    cv::Rect roi(tl_x, tl_y, br_x-tl_x, br_y-tl_y);
+    cv::Mat crop = img(roi);
     // Bottom-right corner of bounding rect
     imwrite(imgout, crop);
     cout << "box saved to " << imgout << "\n";

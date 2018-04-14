@@ -284,8 +284,13 @@ void generate_plate_bounding_box(string src_path, string dest_folder) {
     generate_random_number(number);
     put_generated_number(img, contours, number);
     string imgout = dest_folder + '/' + number_to_string(number) + ".jpg";
-    std::vector<int> bounding_tl = (min(contours[0].x, contours[3].x), min(contours[0].y, contours[1].y)))
-    crop = img[min(contours[0].y, contours[1].y):max(contours[0].y, contours[1].y), min(contours[0].x, contours[3].x):max(contours[0].x, contours[3].x)]
+    //std::vector<int> bounding_tl = (min(contours[0].x, contours[3].x), min(contours[0].y, contours[1].y)))
+    int tl_x = min(contours[0].x, contours[1].x);
+    int tl_y = min(contours[0].y, contours[1].y);
+    int br_x = max(contours[0].x, contours[1].x);
+    int br_y = max(contours[0].y, contours[1].y);
+    cv::Rect roi(tl_x, tl_y, br_x - tl_x, br_y - tl_y);
+    cv::Mat crop = img(roi);
     // Bottom-right corner of bounding rect
     imwrite(imgout, crop);
     cout << "box saved to " << imgout << "\n";
